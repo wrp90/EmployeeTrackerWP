@@ -9,20 +9,20 @@ CREATE TABLE department (
     PRIMARY KEY (ID)
 );
 
-CREATE TABLE roles (
+CREATE TABLE role (
     ID INT NOT NULL AUTO_INCREMENT,
-    title VARCHAR(30) NOT NULL,
-    salary DECIMAL NOT NULL,
-    department_ID INT NOT NULL,
+    Title VARCHAR(30) NOT NULL,
+    Salary DECIMAL NOT NULL,
+    Department_ID INT NOT NULL,
     PRIMARY KEY (ID)
 );
 
-CREATE TABLE employees (
+CREATE TABLE employee (
     ID INT NOT NULL AUTO_INCREMENT,
-    first_name VARCHAR(30) NOT NULL,
-    last_name VARCHAR(30) NOT NULL,
-    role_ID INT NOT NULL,
-    manager_ID INT NULL,
+    First_Name VARCHAR(30) NOT NULL,
+    Last_Name VARCHAR(30) NOT NULL,
+    Role_ID INT NOT NULL,
+    Manager_ID INT NULL,
     PRIMARY KEY (ID)
 );
 

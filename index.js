@@ -23,14 +23,14 @@ function init() {
            name: 'choices',
            choices: [
                'View Departments',
-               'View roles',
-               'View employees',
+               'View Roles',
+               'View Employees',
                'Add Department',
-               'Add role',
-               'Add employee',
+               'Add Role',
+               'Add Employee',
                'Delete Department',
-               'Delete role',
-               'Delete employee',
+               'Delete Role',
+               'Delete Employee',
                'Update Employee role',
             ] 
         }
@@ -40,12 +40,38 @@ function init() {
             case 'View Departments':
                 viewDepartments();
                 break;
+            case 'View Roles':
+                viewRoles();
+                break;
+            case 'View Employees':
+                viewEmployees();
+                break;
         }
     }))
 }
 
 function viewDepartments() {
     connection.query('SELECT * FROM department', (err, res) => {
+        if (err) {
+            throw err;
+        } else {
+            console.table(res);
+        }
+    })
+}
+
+function viewRoles() {
+    connection.query('SELECT * FROM role', (err, res) => {
+        if (err) {
+            throw err;
+        } else {
+            console.table(res);
+        }
+    })
+}
+
+function viewEmployees() {
+    connection.query('SELECT * FROM employee', (err, res) => {
         if (err) {
             throw err;
         } else {
