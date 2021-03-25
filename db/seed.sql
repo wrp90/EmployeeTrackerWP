@@ -1,6 +1,6 @@
 USE database_db;
 
-INSERT INTO departments (name)
+INSERT INTO department (Name)
 VALUES
     ("Sales"),
     ("Marketing"),
@@ -23,11 +23,12 @@ VALUES
     ("Lord", "Gaben", 1, 1),
     ("Albert", "Einstein", 2, 1),
     ("Neils", "Bohr", 2, 2),
+    ('Paul', 'Dirac', 2, 2),
     ("Will", "Smith", 3, null),
-    ("Ada", "Lovelace", 3, null),
+    ("John", "Wick", 3, null),
     ("Maynard", "Keenan", 4, 4),
     ("Luke", "Smith", 4, null),
-    ("Jimmy", "Buffett", 4, null);
+    ("John", "Denver", 4, null);
     
     
     
