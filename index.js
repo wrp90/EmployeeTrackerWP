@@ -46,6 +46,12 @@ function init() {
             case 'View Employees':
                 viewEmployees();
                 break;
+            case 'Add Department':
+                addDepartment();
+                break;
+            case 'Add Role':
+                addRole();
+                break;
         }
     }))
 }
@@ -58,6 +64,7 @@ function viewDepartments() {
             console.table(res);
         }
     })
+    init();
 }
 
 function viewRoles() {
@@ -68,6 +75,7 @@ function viewRoles() {
             console.table(res);
         }
     })
+    init();
 }
 
 function viewEmployees() {
@@ -78,6 +86,31 @@ function viewEmployees() {
             console.table(res);
         }
     })
+    init();
+}
+
+function addDepartment() {
+    inquirer.prompt([
+        {
+            type: 'input',
+            message: 'Please enter the name of the Department.',
+            name: 'add',
+        }
+    ]).then((res) => {
+        console.log(res);
+        connection.query('INSERT INTO department SET ?', { Name: res.add }, (err, res) => {
+            if (err) {
+                throw err;
+            } else {
+                console.log('Department added.');
+            }
+        })
+        init();
+    })
+}
+
+function addRole() {
+    // connection.query('INSERT INTO role ')
 }
 
 init();
