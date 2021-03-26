@@ -52,6 +52,9 @@ function init() {
             case 'Add Role':
                 addRole();
                 break;
+            case 'Add Employee':
+                addEmployee();
+                break;
         }
     }))
 }
@@ -137,11 +140,51 @@ function addRole() {
                 choices: deptNames
             },
         ]).then((res) => {
-            connection.query('INSERT INTO role SET ?', { Title: res.roleName, Salary: res.roleSalary, Department_ID: res.select }, (err, res) => {
+            connection.query('INSERT INTO role SET ?', 
+            { Title: res.roleName, Salary: res.roleSalary, Department_ID: res.select }, (err, res) => {
                 if (err) {
                     throw err;
                 } else {
                     console.log('Role updated.');
+                    init();
+                }
+            });
+        })
+    })
+}
+
+function addEmployee() {
+    connection.query('SELECT * FROM role', (err, res) => {
+        var roleNames = res.map(function(dataPacket) {
+            return {
+                name: dataPacket.Title,
+                value: dataPacket.ID,
+            }
+        })
+        inquirer.prompt([
+            {
+                type: 'input',
+                message: 'Please enter the Employee first name.',
+                name: 'firstName',
+            },
+            {
+                type: 'input',
+                message: 'Please enter the Employee last name',
+                name: 'lastName',
+            },
+            {
+                type: 'list',
+                message: 'Please select an Employee role.',
+                name: 'empRole',
+                choices: roleNames,
+            }
+        ]).then((res) => {
+            connection.query('INSERT INTO Employee SET ?', 
+            { First_Name: res.firstName, Last_Name: res.lastName, Role_ID: res.empRole}, (err, res) => {
+                if (err) {
+                    throw err;
+                } else {
+                    console.log('Employee added.');
                     init();
                 }
             });
