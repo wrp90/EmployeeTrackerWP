@@ -35,7 +35,7 @@ function init() {
             ] 
         }
     ]).then((res => {
-        console.log(res);
+        // console.log(res);
         switch (res.choices) {
             case 'View Departments':
                 viewDepartments();
@@ -62,9 +62,9 @@ function viewDepartments() {
             throw err;
         } else {
             console.table(res);
+            init();
         }
     })
-    init();
 }
 
 function viewRoles() {
@@ -73,9 +73,9 @@ function viewRoles() {
             throw err;
         } else {
             console.table(res);
+            init();
         }
     })
-    init();
 }
 
 function viewEmployees() {
@@ -84,9 +84,9 @@ function viewEmployees() {
             throw err;
         } else {
             console.table(res);
+            init();
         }
     })
-    init();
 }
 
 function addDepartment() {
@@ -97,20 +97,56 @@ function addDepartment() {
             name: 'add',
         }
     ]).then((res) => {
-        console.log(res);
+        // console.log(res);
         connection.query('INSERT INTO department SET ?', { Name: res.add }, (err, res) => {
             if (err) {
                 throw err;
             } else {
                 console.log('Department added.');
+                init();
             }
         })
-        init();
     })
 }
 
 function addRole() {
-    // connection.query('INSERT INTO role ')
+    connection.query('SELECT * FROM department', (err, res) => {
+        var deptNames = res.map(function(dataPacket) {
+            console.log(dataPacket)
+            return {
+                name: dataPacket.Name,
+                value: dataPacket.ID,
+            }
+        })
+        inquirer.prompt([
+            {
+                type: 'input',
+                message: 'Please enter a Role.',
+                name: 'roleName'
+
+            },
+            {
+                type: 'input',
+                message: 'Please enter a salary.',
+                name: 'roleSalary'
+            },
+            {
+                type: 'list',
+                message: 'Please select a Department',
+                name: 'select',
+                choices: deptNames
+            },
+        ]).then((res) => {
+            connection.query('INSERT INTO role SET ?', { Title: res.roleName, Salary: res.roleSalary, Department_ID: res.select }, (err, res) => {
+                if (err) {
+                    throw err;
+                } else {
+                    console.log('Role updated.');
+                    init();
+                }
+            });
+        })
+    })
 }
 
 init();
