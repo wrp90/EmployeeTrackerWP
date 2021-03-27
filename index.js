@@ -28,10 +28,11 @@ function init() {
                'Add Department',
                'Add Role',
                'Add Employee',
-               'Delete Department',
-               'Delete Role',
-               'Delete Employee',
+            //    'Delete Department',
+            //    'Delete Role',
+            //    'Delete Employee',
                'Update Employee Role',
+               'Exit',
             ] 
         }
     ]).then((res => {
@@ -57,6 +58,12 @@ function init() {
                 break;
             case 'Update Employee Role':
                 updateEmployeeRole();
+                break;
+            case 'Exit':
+                connection.end();
+                break;
+            default: 
+                connection.end();
                 break;
         }
     }))
@@ -195,46 +202,51 @@ function addEmployee() {
     })
 }
 
-function updateEmployeeRole() {
-    connection.query('SELECT * FROM employee', async (err, res) => {
-        var empData = res.map(function(dataPacket) {
-            return {
-                name: dataPacket.Last_Name,
-                value: dataPacket.ID,
-            }
-        })
-        inquirer.prompt([
-            {
-                type: 'list',
-                message: 'Please select the Employee.',
-                name: 'empList',
-                choices: empData,
-            },
-            {
-                type: 'list',
-                message: 'Please select the role you wish to update.',
-                name: 'roleUpdate',
-                choices: await getRole(),
-            }
-        ])
-    })
-}
-
-
-const getRole = function() {
-    return connection.query('SELECT * FROM role', (err, res) => {
-        res.map(function(dataPacket) {
+async function updateEmployeeRole() {
+    connection.query('SELECT * FROM role', (err, res) => {
+        var roleData = res.map(function(dataPacket) {
             return {
                 name: dataPacket.Title,
                 value: dataPacket.ID,
             }
         })
+        connection.query('SELECT * FROM employee', (err, res) => {
+            var empData = res.map(function(dataPacket) {
+                return {
+                    name: dataPacket.Last_Name,
+                    value: dataPacket.ID,
+                }
+            })
+            inquirer.prompt([
+                {
+                    type: 'list',
+                    message: 'Please select an Employee.',
+                    name: 'empList',
+                    choices: empData,
+                },
+                {
+                    type: 'list',
+                    message: 'Please select the role you wish to update.',
+                    name: 'roleUpdate',
+                    choices: roleData,
+                }
+            ]).then((res) => {
+                console.log(res);
+                connection.query('UPDATE employee SET ? WHERE ?', 
+                [{ Last_Name: res.empList }, {Role_ID: res.roleUpdate}], (err, res) => {
+                    if (err) {
+                        throw err;
+                    } else {
+                        console.log('Employee Updated');
+                        init();
+                    }
+                })
+            })
+        })
     })
 }
 
-
-
 init();
-// getRole();
+
 
 
