@@ -17,3 +17,6 @@ No tests for this app.
 
 ## Video Demo
 https://drive.google.com/file/d/1tYDwzCrmH5EadD34pud9Ju4gk4uTD1py/view
+
+## Screen Shot
+![GettingStarted](./assets/imgs/emptracker.png)
