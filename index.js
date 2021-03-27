@@ -31,7 +31,7 @@ function init() {
                'Delete Department',
                'Delete Role',
                'Delete Employee',
-               'Update Employee role',
+               'Update Employee Role',
             ] 
         }
     ]).then((res => {
@@ -54,6 +54,9 @@ function init() {
                 break;
             case 'Add Employee':
                 addEmployee();
+                break;
+            case 'Update Employee Role':
+                updateEmployeeRole();
                 break;
         }
     }))
@@ -180,7 +183,7 @@ function addEmployee() {
             }
         ]).then((res) => {
             connection.query('INSERT INTO Employee SET ?', 
-            { First_Name: res.firstName, Last_Name: res.lastName, Role_ID: res.empRole}, (err, res) => {
+            { First_Name: res.firstName, Last_Name: res.lastName, Role_ID: res.empRole }, (err, res) => {
                 if (err) {
                     throw err;
                 } else {
@@ -192,5 +195,46 @@ function addEmployee() {
     })
 }
 
+function updateEmployeeRole() {
+    connection.query('SELECT * FROM employee', async (err, res) => {
+        var empData = res.map(function(dataPacket) {
+            return {
+                name: dataPacket.Last_Name,
+                value: dataPacket.ID,
+            }
+        })
+        inquirer.prompt([
+            {
+                type: 'list',
+                message: 'Please select the Employee.',
+                name: 'empList',
+                choices: empData,
+            },
+            {
+                type: 'list',
+                message: 'Please select the role you wish to update.',
+                name: 'roleUpdate',
+                choices: await getRole(),
+            }
+        ])
+    })
+}
+
+
+const getRole = function() {
+    return connection.query('SELECT * FROM role', (err, res) => {
+        res.map(function(dataPacket) {
+            return {
+                name: dataPacket.Title,
+                value: dataPacket.ID,
+            }
+        })
+    })
+}
+
+
+
 init();
+// getRole();
+
 
